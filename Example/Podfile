@@ -1,0 +1,13 @@
+use_frameworks!
+
+platform :ios, '9.0'
+
+target 'Hi-Network-Module_Example' do
+  pod 'Hi-Network-Module', :path => '../'
+
+  target 'Hi-Network-Module_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end
