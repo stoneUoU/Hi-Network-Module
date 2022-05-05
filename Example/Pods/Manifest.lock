@@ -1,0 +1,16 @@
+PODS:
+  - Hi-Network-Module (0.1.0)
+
+DEPENDENCIES:
+  - Hi-Network-Module (from `../`)
+
+EXTERNAL SOURCES:
+  Hi-Network-Module:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  Hi-Network-Module: c455b99ce0badab4572dbdebdb107cc0d08911fc
+
+PODFILE CHECKSUM: c7f890e7788de9611de5c3990e64b7e8b67d5619
+
+COCOAPODS: 1.11.3
