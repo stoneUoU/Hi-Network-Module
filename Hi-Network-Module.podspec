@@ -30,7 +30,11 @@ TODO: Add long description of the pod here.
 
   s.ios.deployment_target = '9.0'
 
-  s.source_files = 'Hi-Network-Module/Classes/**/*'
+  s.source_files = 'Hi-Network-Module/Classes/**/*.{h,m,swift}'
+  
+  s.dependency 'Alamofire'
+  s.dependency 'SwiftyJSON'
+  s.dependency 'Moya'
   
   # s.resource_bundles = {
   #   'Hi-Network-Module' => ['Hi-Network-Module/Assets/*.png']
