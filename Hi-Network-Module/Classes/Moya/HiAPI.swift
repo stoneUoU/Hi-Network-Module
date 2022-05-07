@@ -9,15 +9,15 @@
 import Moya
 import SwiftyJSON
 
-struct HiAPI {
-    static func request(
-        Authos:String,
+public struct HiAPI {
+    public static func request(
+        accessToken:String,
         _ target: HiApiConfig,
         success successCallback: @escaping (JSON) -> Void,
         error errorCallback: @escaping (String) -> Void,
         failure failureCallback: @escaping (MoyaError) -> Void
         ) {
-        MoyaProvider<HiApiConfig>(plugins: [HiAuthPlugin(token: Authos)]).request(target) { result in
+        MoyaProvider<HiApiConfig>(plugins: [HiAuthPlugin(token: accessToken)]).request(target) { result in
             switch result {
             case let .success(response):
                 do {

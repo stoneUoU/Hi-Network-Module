@@ -10,29 +10,44 @@ import Moya
 //请求分类
 public enum HiApiConfig {
     
-    case toGetMethod([String : Any])
+    case fetchGetMethod([String : Any])
     
-    case toPostMethod([String : Any])
+    case fetchPostMethod([String : Any])
+    
+    //获取app的基本配置信息：
+    case fetchBaseInfo(Void)
+    
+    //获取首页导航栏数据：
+    case fetchNavigationData(Void)
+    
+    //获取首页信息：
+    case fetchHomeData([String : Any])
 }
 
 //请求配置
 extension HiApiConfig: AuthorizedTargetType {
     //服务器地址
     public var baseURL: URL {
-        return URL(string: "")!
+        return URL(string: HiRequestSwiftURL)!
     }
     //各个请求的具体路径
     public var path: String {
         switch self {
-        case .toGetMethod(_):
+        case .fetchGetMethod(_):
             return ""
-        case .toPostMethod(_):
+        case .fetchPostMethod(_):
             return ""
+        case .fetchBaseInfo(_):
+            return "/provide/baseinfo"
+        case .fetchNavigationData(_):
+            return "/provide/home_nav"
+        case .fetchHomeData(_):
+            return "/vod/top2"
         }
     }
     public var method: Moya.Method {
         switch self {
-        case .toGetMethod(_):
+        case .fetchGetMethod(_),.fetchBaseInfo(_),.fetchNavigationData(_):
             return .get
         default:
             return .post
@@ -42,13 +57,13 @@ extension HiApiConfig: AuthorizedTargetType {
     public var task: Task {
         switch self {
         //get 走这
-        case .toGetMethod(let paras):
+        case .fetchGetMethod(let paras):
             var params: [String: Any] = [:]
             params = paras
             return .requestParameters(parameters: params,
                                       encoding: URLEncoding.default)
         //post 走这
-        case .toPostMethod(let  paras):
+        case .fetchPostMethod(let  paras),.fetchHomeData(let paras):
             var params: [String: Any] = [:]
             params = paras
             return .requestParameters(parameters: params,
@@ -73,7 +88,7 @@ extension HiApiConfig: AuthorizedTargetType {
     //是否需要授权
     public var needsAuth: Bool {
         switch self {
-        case .toGetMethod(_):
+        case .fetchGetMethod(_),.fetchBaseInfo(_):
             return false
         default:
             return true
