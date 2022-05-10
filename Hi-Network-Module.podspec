@@ -32,9 +32,11 @@ TODO: Add long description of the pod here.
 
   s.source_files = 'Hi-Network-Module/Classes/**/*.{h,m,swift}'
   
+  s.dependency 'Moya'
   s.dependency 'Alamofire'
   s.dependency 'SwiftyJSON'
-  s.dependency 'Moya'
+  s.dependency 'MBProgressHUD'
+  s.dependency 'Hi-Helper-Module'
   
   # s.resource_bundles = {
   #   'Hi-Network-Module' => ['Hi-Network-Module/Assets/*.png']

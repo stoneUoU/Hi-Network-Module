@@ -22,13 +22,21 @@ public enum HiApiConfig {
     
     //获取首页信息：
     case fetchHomeData([String : Any])
+    
+    //获取unitCfg接口数据：
+    case fetchUnitCfg([String : Any])
 }
 
 //请求配置
-extension HiApiConfig: AuthorizedTargetType {
+extension HiApiConfig:HiApiConfigTargetType {
     //服务器地址
     public var baseURL: URL {
-        return URL(string: HiRequestSwiftURL)!
+        switch self {
+            case .fetchUnitCfg(_):
+                return URL(string: HiHSARequestSwiftURL)!
+            default:
+                return URL(string: HiRequestSwiftURL)!
+        }
     }
     //各个请求的具体路径
     public var path: String {
@@ -43,6 +51,8 @@ extension HiApiConfig: AuthorizedTargetType {
             return "/provide/home_nav"
         case .fetchHomeData(_):
             return "/vod/top2"
+        case .fetchUnitCfg(_):
+            return "/base/api/unitCfg"
         }
     }
     public var method: Moya.Method {
@@ -68,6 +78,11 @@ extension HiApiConfig: AuthorizedTargetType {
             params = paras
             return .requestParameters(parameters: params,
                                       encoding: JSONEncoding.default)
+        case .fetchUnitCfg(let paras):
+            var params: [String: Any] = ["appId":"19E179E5DC29C05E65B90CDE57A1C7E5","encType":"plain","signType":"plain","timestamp":"1652165413","transType":"ec.queryCode","version":"1.0.0"];
+            params["data"] = paras
+            return .requestParameters(parameters: params,
+                                      encoding: JSONEncoding.default)
         //没有请求参数走这
         default:
             return .requestPlain
@@ -83,15 +98,59 @@ extension HiApiConfig: AuthorizedTargetType {
     }
     //请求头
     public var headers: [String: String]? {
-        return nil
+        return [
+            "Content-Type": "application/json",
+            "Accept-Language": "zh-Hans-CN;q=1, en-CN;q=0.9",
+            "User-Agent": "HealthCommunity/1.3.7 (iPhone; iOS 15.4.1; Scale/2.00)",
+            "appId": "19E179E5DC29C05E65B90CDE57A1C7E5",
+            "appVersion": "1.3.7",
+            "channel": "app",
+            "operateSystem": "iOS",
+            "operateSystemVersion": "15.4.1",
+            "x-tif-nonce": "15.4.1",
+            "x-tif-paasid": "sn7LxDszc7Ib4bOB",
+            "x-tif-signature": "a6ce2d32664636b8383a64017105e8ab9cd71975f543b9b437469aa3d444d4a2",
+            "x-tif-timestamp": "1652165413"
+        ]
     }
-    //是否需要授权
-    public var needsAuth: Bool {
+    
+    //是否需要Loading
+    public var needLoading: Bool {
         switch self {
-        case .fetchGetMethod(_),.fetchBaseInfo(_):
+        case .fetchGetMethod(_),.fetchHomeData(_):
+            return true
+        default:
+            return false
+        }
+    }
+    
+    //是否需要加密:
+    public var needEncypted: Bool {
+        switch self {
+        case .fetchGetMethod(_),.fetchHomeData(_):
+            return true
+        default:
+            return false
+        }
+    }
+    
+    //是否需要打印请求体:
+    public var needLogRequest: Bool {
+        switch self {
+        case .fetchGetMethod(_),.fetchHomeData(_):
             return false
         default:
             return true
+        }
+    }
+    
+    //是否需要打印响应体:
+    public var needLogResponse: Bool {
+        switch self {
+        case .fetchGetMethod(_),.fetchHomeData(_),.fetchUnitCfg(_):
+            return true
+        default:
+            return false
         }
     }
 }
