@@ -25,6 +25,9 @@ public enum HiApiConfig {
     
     //获取unitCfg接口数据：
     case fetchUnitCfg([String : Any])
+    
+    //获取地方专区接口数据：
+    case fetchSite([String : Any])
 }
 
 //请求配置
@@ -32,7 +35,7 @@ extension HiApiConfig:HiApiConfigTargetType {
     //服务器地址
     public var baseURL: URL {
         switch self {
-            case .fetchUnitCfg(_):
+            case .fetchUnitCfg(_),.fetchSite(_):
                 return URL(string: HiHSARequestSwiftURL)!
             default:
                 return URL(string: HiRequestSwiftURL)!
@@ -53,6 +56,8 @@ extension HiApiConfig:HiApiConfigTargetType {
             return "/vod/top2"
         case .fetchUnitCfg(_):
             return "/base/api/unitCfg"
+        case .fetchSite(_):
+            return "/base/api/applet/provinces"
         }
     }
     public var method: Moya.Method {
@@ -78,7 +83,7 @@ extension HiApiConfig:HiApiConfigTargetType {
             params = paras
             return .requestParameters(parameters: params,
                                       encoding: JSONEncoding.default)
-        case .fetchUnitCfg(let paras):
+        case .fetchUnitCfg(let paras), .fetchSite(let paras):
             var params: [String: Any] = ["appId":"19E179E5DC29C05E65B90CDE57A1C7E5","encType":"plain","signType":"plain","timestamp":"1652165413","transType":"ec.queryCode","version":"1.0.0"];
             params["data"] = paras
             return .requestParameters(parameters: params,
@@ -117,7 +122,7 @@ extension HiApiConfig:HiApiConfigTargetType {
     //是否需要Loading
     public var needLoading: Bool {
         switch self {
-        case .fetchGetMethod(_),.fetchHomeData(_):
+        case .fetchGetMethod(_),.fetchHomeData(_),.fetchSite(_):
             return true
         default:
             return false
@@ -137,20 +142,26 @@ extension HiApiConfig:HiApiConfigTargetType {
     //是否需要打印请求体:
     public var needLogRequest: Bool {
         switch self {
-        case .fetchGetMethod(_),.fetchHomeData(_):
-            return false
-        default:
+        case .fetchGetMethod(_),.fetchHomeData(_),.fetchSite(_):
             return true
+        default:
+            return false
         }
     }
     
     //是否需要打印响应体:
     public var needLogResponse: Bool {
         switch self {
-        case .fetchGetMethod(_),.fetchHomeData(_),.fetchUnitCfg(_):
+        case .fetchGetMethod(_),.fetchHomeData(_),.fetchSite(_):
             return true
         default:
             return false
         }
     }
+    
+//    public var viewController: UIViewController {
+//        switch self {
+//            return UIViewController();
+//        }
+//    }
 }

@@ -20,6 +20,8 @@ protocol HiApiConfigTargetType: TargetType {
     var needLogRequest: Bool { get }
     //是否需要打印响应体:
     var needLogResponse: Bool { get }
+    //获取当前请求的控制器：
+//    var viewController: UIViewController { get }
 }
 
 struct HiApiConfigPlugin: PluginType {
@@ -27,20 +29,25 @@ struct HiApiConfigPlugin: PluginType {
     var configTarget:HiApiConfig?;
     
     func prepare(_ request: URLRequest, target: TargetType) -> URLRequest {
-        //判断该请求是否需要Loading
+        var request = request;
+        request.addValue("this is a accessToken", forHTTPHeaderField: "accessToken");
         self.logRequest(request:request);
+        //判断该请求是否需要Loading
         guard let needLoading = configTarget?.needLoading, needLoading else {
             return request;
         }
         let vc:UIViewController = HiPageHelper.fetchCurrentController() ?? UIViewController();
         HiHudToast.showHUD(ctrl: vc);
-        var request = request;
-        request.addValue("this is a accessToken", forHTTPHeaderField: "accessToken");
         return request
     }
     
     func willSend(_ request: RequestType, target: TargetType) {
-        
+//        var request = request.request;
+//        guard let needLoading = configTarget?.needLoading, needLoading else {
+//            return;
+//        }
+//        let vc:UIViewController = HiPageHelper.fetchCurrentController() ?? UIViewController();
+//        HiHudToast.showHUD(ctrl: vc);
     }
     
     func didReceive(_ result: Result<Response, MoyaError>, target: TargetType) {
